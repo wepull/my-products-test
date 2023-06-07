@@ -1,0 +1,42 @@
+config:
+  target: "https://example.com/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - delete:
+          url: "/3"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 200
+
+  - name: "API request with non-existent product"
+    flow:
+      - delete:
+          url: "/3434"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 404
+
+  - name: "API request with edge case - large ID"
+    flow:
+      - delete:
+          url: "/99999999999999999999"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 404
+
+  - name: "API request with edge case - special characters in ID"
+    flow:
+      - delete:
+          url: "/@#$%^&*()"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 400

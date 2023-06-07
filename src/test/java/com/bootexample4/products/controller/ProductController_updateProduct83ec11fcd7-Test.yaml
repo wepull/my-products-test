@@ -1,0 +1,60 @@
+config:
+  target: "http://localhost:8080/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - put:
+          url: "/2"
+          json:
+            name: "applenew"
+            description: "apple"
+            price: 50.0
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$"
+              as: "response"
+          assert:
+            - statusCode: 200
+            - response.name: "applenew"
+            - response.description: "apple"
+            - response.price: 50.0
+
+  - name: "API request with validation failure"
+    flow:
+      - put:
+          url: "/2"
+          json:
+            description: "apple"
+            price: 50.0
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$"
+              as: "response"
+          assert:
+            - statusCode: 400
+            - response.message: "Missing required field: name"
+
+  - name: "API request with edge case"
+    flow:
+      - put:
+          url: "/2"
+          json:
+            name: "applenew@#$%^&*"
+            description: "apple"
+            price: 99999999999.99
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$"
+              as: "response"
+          assert:
+            - statusCode: 200
+            - response.name: "applenew@#$%^&*"
+            - response.description: "apple"
+            - response.price: 99999999999.99

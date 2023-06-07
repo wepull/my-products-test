@@ -1,0 +1,51 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/api/products"
+          headers:
+            Content-Type: "application/json"
+      - think: 1
+      - log: "GET /api/products - Successfully retrieved all products"
+      - assert:
+          - statusCode: 200
+          - hasProperty: "products"
+          - equals:
+              - "{{ products.length }}"
+              - 3
+
+  - name: "API request with no products"
+    flow:
+      - get:
+          url: "/api/products"
+          headers:
+            Content-Type: "application/json"
+      - think: 1
+      - log: "GET /api/products - No products found"
+      - assert:
+          - statusCode: 200
+          - hasProperty: "products"
+          - equals:
+              - "{{ products.length }}"
+              - 0
+
+  - name: "API request with edge case"
+    flow:
+      - get:
+          url: "/api/products?search=%23special%20characters"
+          headers:
+            Content-Type: "application/json"
+      - think: 1
+      - log: "GET /api/products - Successfully retrieved products with special characters"
+      - assert:
+          - statusCode: 200
+          - hasProperty: "products"
+          - matchRegexp:
+              - "{{ products[0].name }}"
+              - "/^[a-zA-Z0-9!@#$%^&*()_+-=]+$/"

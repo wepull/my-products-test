@@ -1,0 +1,49 @@
+config:
+  target: "https://example.com/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/2"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "id"
+          - hasProperty: "name"
+          - hasProperty: "price"
+
+  - name: "API request with non-existing ID"
+    flow:
+      - get:
+          url: "/9999"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 404
+
+  - name: "API request with invalid ID"
+    flow:
+      - get:
+          url: "/invalid-id"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 400
+          - hasProperty: "error"
+          - equals: ["{{ response.body.error }}", "Invalid ID format"]
+
+  - name: "API request with edge case"
+    flow:
+      - get:
+          url: "/232"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "name"
+          - matchRegexp: ["{{ response.body.name }}", "^[-a-zA-Z0-9!@#$%^&*()_+={}\\[\\]|;:'\",<.>/?]+$"]
