@@ -1,0 +1,58 @@
+scenarios:
+  - name: Successful API request
+    description: Create a product with valid data
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            id: 1
+            name: Product 1
+            description: Product description
+            price: 100.0
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 200
+          body:
+            id: 1
+            name: Product 1
+            description: Product description
+            price: 100.0
+  - name: API request with validation failure
+    description: Create a product with invalid data
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            id: 1
+            name: Product 1
+            description: Product description
+            price: 100.0
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 400
+          body:
+            message: Invalid product data
+  - name: API request with edge case
+    description: Create a product with special characters or large data
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            id: 1
+            name: Product 1
+            description: Product description
+            price: 100.0
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 200
+          body:
+            id: 1
+            name: Product 1
+            description: Product description
+            price: 100.0

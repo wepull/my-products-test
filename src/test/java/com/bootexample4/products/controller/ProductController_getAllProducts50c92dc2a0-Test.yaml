@@ -1,0 +1,53 @@
+scenarios:
+  - name: Successful API request
+    description: This test verifies that a successful API request returns a status code of 200 and the expected data.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products
+          method: GET
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+      - response:
+          status_code: 200
+          body:
+            - id: 1
+              name: Product 1
+              price: 10.00
+            - id: 2
+              name: Product 2
+              price: 20.00
+            - id: 3
+              name: Product 3
+              price: 30.00
+  - name: API request with validation failure
+    description: This test verifies that an API request with validation failure returns a status code of 400 and the expected error message.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products
+          method: POST
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+          body:
+            name: Product 1
+            price: 10.00
+      - response:
+          status_code: 400
+          body:
+            message: "The name field is required."
+  - name: API request with edge case
+    description: This test verifies that an API request with an edge case returns a status code within an acceptable range and the expected behavior.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products
+          method: GET
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+          body:
+            name: Product 1
+            price: 10.00
+      - response:
+          status_code: 200
+          body:
+            - id: 1
+              name: Product 1
+              price: 10.00
