@@ -1,0 +1,34 @@
+config:
+  target: "https://example.com/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/2"
+          expect:
+            - statusCode: 200
+            - hasProperty: "id"
+            - equals:
+                - "{{ response.body.id }}"
+                - 2
+
+  - name: "API request with not found product"
+    flow:
+      - get:
+          url: "/9999"
+          expect:
+            - statusCode: 404
+
+  - name: "API request with invalid ID"
+    flow:
+      - get:
+          url: "/invalid_id"
+          expect:
+            - statusCode: 400

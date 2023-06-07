@@ -1,0 +1,57 @@
+config:
+  target: "http://localhost:8080/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - post:
+          url: ""
+          json:
+            id: 4
+            name: "Test Product"
+            description: "Test product description"
+            price: 100.0
+          headers:
+            content-type: "application/json"
+          capture:
+            - json: "$.id"
+              as: "productId"
+          expect:
+            - statusCode: 200
+            - hasProperty: "id"
+
+  - name: "API request with validation failure"
+    flow:
+      - post:
+          url: ""
+          json:
+            id: 5
+            name: ""
+            description: "Invalid product"
+            price: 50.0
+          headers:
+            content-type: "application/json"
+          expect:
+            - statusCode: 400
+            - hasProperty: "errorMessage"
+
+  - name: "API request with edge case"
+    flow:
+      - post:
+          url: ""
+          json:
+            id: 6
+            name: "Product with special characters: !@#$%^&*()"
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus justo et lacus ultricies, non malesuada risus viverra. Integer euismod elit a justo ultrices, et congue odio bibendum. Sed tincidunt, nibh a facilisis fringilla, enim turpis suscipit sapien, vitae volutpat nisl neque vel metus. Nulla facilisi. Etiam vehicula, felis id cursus facilisis, sapien nunc facilisis odio, vel auctor est mauris vitae odio. Sed facilisis, nisl et vehicula tincidunt, dui eros sollicitudin sapien, sed pretium tellus mauris a tellus. Suspendisse potenti. Duis sagittis, odio eget consectetur auctor, diam mauris dictum nibh, vitae laoreet arcu quam a libero. Sed scelerisque, tellus sed ullamcorper tincidunt, ligula metus lacinia risus, eget tempor turpis neque a elit."
+            price: 999999.99
+          headers:
+            content-type: "application/json"
+          expect:
+            - statusCode: 200
+            - hasProperty: "id"
+            - matchRegexp:
+                selector: "$.name"
+                pattern: "^Product with special characters: !@#\$%\^&\*\(\)$"

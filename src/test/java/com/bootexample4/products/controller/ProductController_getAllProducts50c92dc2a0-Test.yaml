@@ -1,0 +1,45 @@
+config:
+  target: "http://localhost:8080/api"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "products"
+          - equals:
+              - "{{ products.length }}"
+              - 3
+
+  - name: "API request with no products"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "products"
+          - equals:
+              - "{{ products.length }}"
+              - 0
+
+  - name: "API request with edge case"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "products"
+          - equals:
+              - "{{ products.length }}"
+              - "{{ $randomNumber(0, 10) }}"
