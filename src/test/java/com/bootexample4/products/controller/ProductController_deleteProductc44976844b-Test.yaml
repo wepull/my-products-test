@@ -1,0 +1,39 @@
+scenarios:
+  - name: Successful API request
+    description: This test verifies that a valid request to the delete product endpoint returns a 200 OK response.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY0MjI1MjIyNywiZXhwIjoxNjQyMjU0NzI3fQ.-2643_714_632_765_543_876_987_123_456_789_012
+      - response:
+          status_code: 200
+          body:
+            message: Product deleted successfully
+  - name: API request with validation failure
+    description: This test verifies that an invalid request to the delete product endpoint returns a 400 Bad Request response.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3434
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY0MjI1MjIyNywiZXhwIjoxNjQyMjU0NzI3fQ.-2643_714_632_765_543_876_987_123_456_789_012
+      - response:
+          status_code: 400
+          body:
+            message: Product not found
+  - name: API request with edge case
+    description: This test verifies that a request to the delete product endpoint with special characters or large data returns a 200 OK response.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTY0MjI1MjIyNywiZXhwIjoxNjQyMjU0NzI3fQ.-2643_714_632_765_543_876_987_123_456_789_012
+          body:
+            id: 3
+      - response:
+          status_code: 200
+          body:
+            message: Product deleted successfully

@@ -1,0 +1,47 @@
+scenarios:
+  - name: Successful API request
+    description: This test verifies that a valid API request returns a successful response.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products/2
+          method: PUT
+          headers:
+            Content-Type: application/json
+          body: '{"id": 2, "name": "applenew", "description": "apple", "price": 50.0}'
+      - response:
+          status_code: 200
+          body:
+            id: 2
+            name: applenew
+            description: apple
+            price: 50.0
+  - name: API request with validation failure
+    description: This test verifies that an invalid API request returns a validation error.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products/2
+          method: PUT
+          headers:
+            Content-Type: application/json
+          body: '{"name": "applenew", "description": "apple", "price": 50.0}'
+      - response:
+          status_code: 400
+          body:
+            error: "Validation failed"
+            message: "The name field is required."
+  - name: API request with edge case
+    description: This test verifies that an API request with special characters or large data returns a successful response.
+    steps:
+      - request:
+          url: http://localhost:8080/api/products/2
+          method: PUT
+          headers:
+            Content-Type: application/json
+          body: '{"id": 2, "name": "applenew\u0000", "description": "apple", "price": 50.0}'
+      - response:
+          status_code: 200
+          body:
+            id: 2
+            name: applenew\u0000
+            description: apple
+            price: 50.0

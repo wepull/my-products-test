@@ -1,0 +1,48 @@
+scenarios:
+  - name: Successful API request
+    request:
+      method: GET
+      url: http://localhost:8080/api/products
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+    response:
+      status_code: 200
+      body:
+        - id: 1
+          name: Product 1
+          price: 10.00
+        - id: 2
+          name: Product 2
+          price: 20.00
+        - id: 3
+          name: Product 3
+          price: 30.00
+  - name: API request with validation failure
+    request:
+      method: GET
+      url: http://localhost:8080/api/products
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+      body:
+        - name: Product 1
+          price: 10.00
+    response:
+      status_code: 400
+      body:
+        error: "Missing required field 'id'"
+  - name: API request with edge case
+    request:
+      method: GET
+      url: http://localhost:8080/api/products
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf8Jb_Q6g
+      body:
+        - name: Product 1
+          price: 10.00
+          id: 12345678901234567890123456789012
+    response:
+      status_code: 200
+      body:
+        - id: 12345678901234567890123456789012
+          name: Product 1
+          price: 10.00
