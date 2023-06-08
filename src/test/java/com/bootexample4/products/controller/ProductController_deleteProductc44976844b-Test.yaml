@@ -1,0 +1,44 @@
+scenarios:
+  - name: Successful API request
+    description: This test verifies that a valid request to the API results in a successful response.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjIyMzI1NjYyLCJleHAiOjE2MjIzMjU1NjJ9.-4-8728554-7677-4807-8310-506998982157
+      - response:
+          status_code: 200
+          body:
+            message: Product deleted successfully
+  - name: API request with validation failure
+    description: This test verifies that an invalid request to the API results in a validation error.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3434
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjIyMzI1NjYyLCJleHAiOjE2MjIzMjU1NjJ9.-4-8728554-7677-4807-8310-506998982157
+      - response:
+          status_code: 400
+          body:
+            message: Product not found
+  - name: API request with edge case
+    description: This test verifies that an API request with special characters or large data results in a successful response.
+    steps:
+      - request:
+          method: DELETE
+          path: /api/products/3
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjIyMzI1NjYyLCJleHAiOjE2MjIzMjU1NjJ9.-4-8728554-7677-4807-8310-506998982157
+          body: >
+            {
+              "id": 3,
+              "name": "Test product",
+              "price": 100.00,
+              "description": "This is a test product."
+            }
+      - response:
+          status_code: 200
+          body:
+            message: Product deleted successfully

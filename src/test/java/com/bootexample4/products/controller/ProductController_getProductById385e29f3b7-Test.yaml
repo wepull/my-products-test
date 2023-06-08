@@ -1,0 +1,41 @@
+scenarios:
+  - name: Successful API request
+    description: This test verifies that a valid API request returns a successful response.
+    steps:
+      - request:
+          method: GET
+          path: /api/products/232
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf4V2uyX0
+      - response:
+          status_code: 200
+          body:
+            id: 232
+            name: Product Name
+            price: 100.00
+  - name: API request with validation failure
+    description: This test verifies that an invalid API request returns a validation error.
+    steps:
+      - request:
+          method: GET
+          path: /api/products/232
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf4V2uyX0
+      - response:
+          status_code: 400
+          body:
+            message: Invalid product ID
+  - name: API request with edge case
+    description: This test verifies that an API request with special characters or large data returns a successful response.
+    steps:
+      - request:
+          method: GET
+          path: /api/products/232
+          headers:
+            Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POkS0IeKNf4V2uyX0
+      - response:
+          status_code: 200
+          body:
+            id: 232
+            name: Product Name
+            price: 100.00
