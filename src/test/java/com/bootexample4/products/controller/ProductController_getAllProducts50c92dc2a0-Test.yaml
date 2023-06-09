@@ -1,0 +1,50 @@
+config:
+  target: "http://localhost:8080/api"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "products"
+
+  - name: "API request with no products"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - equals:
+              json("$.products.length()"): 0
+          - comment: "Expecting an empty list of products"
+
+  - name: "API request with 3 products"
+    flow:
+      - get:
+          url: "/products"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - equals:
+              json("$.products.length()"): 3
+          - comment: "Expecting a list with 3 products"
+
+  - name: "API request with edge case"
+    flow:
+      - get:
+          url: "/products?name=%22%3Cscript%3Ealert(%27XSS%27)%3C%2Fscript%3E%22"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - comment: "Expecting the API to handle special characters and prevent XSS attacks"

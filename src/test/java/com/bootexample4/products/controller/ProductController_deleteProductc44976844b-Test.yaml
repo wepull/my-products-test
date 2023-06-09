@@ -1,0 +1,33 @@
+config:
+  target: "http://localhost:8080/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - delete:
+          url: "/3"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 200
+
+  - name: "API request with not found product"
+    flow:
+      - delete:
+          url: "/3434"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 404
+
+  - name: "API request with edge case"
+    flow:
+      - delete:
+          url: "/-1"
+          headers:
+            Content-Type: "application/json"
+          expect:
+            - statusCode: 404

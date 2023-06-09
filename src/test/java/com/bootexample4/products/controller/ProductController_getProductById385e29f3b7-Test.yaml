@@ -1,0 +1,45 @@
+config:
+  target: "http://localhost:8080/api/products"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+
+scenarios:
+  - name: "Successful API request"
+    flow:
+      - get:
+          url: "/2"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 200
+          - hasProperty: "id"
+          - hasProperty: "name"
+          - hasProperty: "price"
+
+  - name: "API request with non-existing ID"
+    flow:
+      - get:
+          url: "/999999"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 404
+
+  - name: "API request with invalid ID type"
+    flow:
+      - get:
+          url: "/invalid_id"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 400
+
+  - name: "API request with edge case: large ID"
+    flow:
+      - get:
+          url: "/1000000000000000"
+          headers:
+            Content-Type: "application/json"
+        expect:
+          - statusCode: 404
