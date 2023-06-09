@@ -1,0 +1,59 @@
+scenarios:
+  - name: Successful API request
+    description: Creates a new product with a valid JSON payload.
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            id: 1
+            name: "Apple"
+            description: "A delicious apple"
+            price: 50.0
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 200
+          body:
+            id: 1
+            name: "Apple"
+            description: "A delicious apple"
+            price: 50.0
+  - name: API request with validation failure
+    description: Creates a new product with an invalid JSON payload.
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            name: "Apple"
+            description: "A delicious apple"
+            price: 50.0
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 400
+          body:
+            error: "Validation failed"
+            message: "The name field is required."
+  - name: API request with edge case
+    description: Creates a new product with a JSON payload that contains special characters or large data.
+    steps:
+      - request:
+          method: POST
+          path: /api/products
+          body:
+            id: 1
+            name: "Apple"
+            description: "A delicious apple"
+            price: 50.0
+            <insert special characters or large data here>
+          headers:
+            Content-Type: application/json
+      - response:
+          status_code: 200
+          body:
+            id: 1
+            name: "Apple"
+            description: "A delicious apple"
+            price: 50.0

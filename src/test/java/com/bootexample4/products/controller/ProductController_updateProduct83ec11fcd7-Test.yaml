@@ -1,0 +1,31 @@
+scenarios:
+  - name: Successful API request
+    request:
+      method: PUT
+      url: /api/products/2
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjA2MjY5MzY5LCJleHAiOjE2MDYyNjkzNTksImlzcyI6InN1cHBvcnRlZCIsImp0aSI6IjI0YzQ5YzU4LTQ2ZjYtNDg5Ny1iY2Q3LTQ0Y2Y5Y2I5YzU4NCJ9.1605816906202997099
+      body: '{"id":2,"name":"applenew","description":"apple","price":50.0}'
+    response:
+      status_code: 200
+      body: '{"id":2,"name":"applenew","description":"apple","price":50.0}'
+  - name: API request with validation failure
+    request:
+      method: PUT
+      url: /api/products/2
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjA2MjY5MzY5LCJleHAiOjE2MDYyNjkzNTksImlzcyI6InN1cHBvcnRlZCIsImp0aSI6IjI0YzQ5YzU4LTQ2ZjYtNDg5Ny1iY2Q3LTQ0Y2Y5Y2I5YzU4NCJ9.1605816906202997099
+      body: '{"name":"applenew","description":"apple","price":50.0}'
+    response:
+      status_code: 400
+      body: '{"message":"The id field is required."}'
+  - name: API request with edge case
+    request:
+      method: PUT
+      url: /api/products/2
+      headers:
+        Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjA2MjY5MzY5LCJleHAiOjE2MDYyNjkzNTksImlzcyI6InN1cHBvcnRlZCIsImp0aSI6IjI0YzQ5YzU4LTQ2ZjYtNDg5Ny1iY2Q3LTQ0Y2Y5Y2I5YzU4NCJ9.1605816906202997099
+      body: '{"id":2,"name":"applenew","description":"apple","price":"50.0"}'
+    response:
+      status_code: 200
+      body: '{"id":2,"name":"applenew","description":"apple","price":50.0}'

@@ -1,0 +1,25 @@
+---
+requests:
+  - name: Delete product
+    method: DELETE
+    url: /api/products/{id}
+    body:
+      productId: 3
+    headers:
+      Content-Type: application/json
+    response:
+      status_code: 200
+      body:
+        id: 3
+        name: Product 3
+        price: 10.00
+        quantity: 10
+    validations:
+      - jsonpath: $.id
+        equals: 3
+      - jsonpath: $.name
+        equals: Product 3
+      - jsonpath: $.price
+        equals: 10.00
+      - jsonpath: $.quantity
+        equals: 10

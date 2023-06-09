@@ -1,0 +1,24 @@
+---
+requests:
+  - name: Get product by ID
+    method: GET
+    url: http://localhost:8080/api/products/2
+    headers:
+      Content-Type: application/json
+    response:
+      status_code: 200
+      body:
+        product_id: 2
+        name: Product 2
+        price: 10.00
+        quantity: 10
+
+  - name: Get product by ID that does not exist
+    method: GET
+    url: http://localhost:8080/api/products/1000
+    headers:
+      Content-Type: application/json
+    response:
+      status_code: 404
+      body:
+        message: Product not found
