@@ -1,0 +1,6 @@
+productId,statusCode,scenario
+1,200,"successful operation"
+2,404,"Product not found"
+3,200,"successful operation"
+4,404,"Product not found"
+5,200,"successful operation"
